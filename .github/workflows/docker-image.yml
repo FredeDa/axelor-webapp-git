@@ -1,0 +1,38 @@
+name: Docker Axelor-webapp
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ axelor-webapp-git }}
+  
+jobs:
+
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ axelor-webapp-git }}
+          username: ${{ FredeDa }}
+          password: ${{ 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 }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./axelor
+          push: true
+          file: ./axelor/Dockerfile
+          tags: ${{ axelor-webapp-git }}/${{ ghcr.io/frededa/axelor-webapp-git }}:latest
